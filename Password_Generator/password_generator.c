@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
+#include "../user_input.h"
 
 // Functions
-char *get_input();
 long get_pass_len();
 bool ask_char_type(char *ask_message);
+void append_to_pass_chars(char *chars_array, int chars_array_len, char *pass_chars, int *pass_chars_len);
 
 int main(void){
 	// Get length of the password
@@ -29,39 +31,41 @@ int main(void){
     upper_chars[i] = toupper(lower_chars[i]);
   }
 	char num_chars[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+  int nums_len = 10;
 	char spec_chars[] = {'~', '`', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '+', '=', '{', '}', '[', ']', '|', '\\', ':', ';', '\'', '"', '<', '>', ',', '.', '?', '/'};
   int spec_chars_len = sizeof(spec_chars) / sizeof(char);
 	// Generate password
     int pass_chars_len = letters_len;
     char *pass_chars = malloc(pass_chars_len);
+    // Set password characters to lowercase letters
     for(int i = 0; i < pass_chars_len; i++){
       pass_chars[i] = lower_chars[i];
     }
 		// Get an array of each type of characters that can be in the password
     if(spec){
-      // get the previous pass_char_len
-      int prev_pass_chars_len = pass_chars_len;
-      // Resize pass_chars so it can fit spec_chars
-      pass_chars_len += spec_chars_len;
-      pass_chars = realloc(pass_chars, pass_chars_len);
-      // Append the spec_chars to the pass_chars
-      for (int i = 0; i < spec_chars_len; i++) {
-        pass_chars[i + prev_pass_chars_len - 1] = spec_chars[i];
-      }
+      append_to_pass_chars(spec_chars, spec_chars_len, pass_chars, &pass_chars_len);
     }
     if(upper){
-      // get the previous pass_char_len
-      int prev_pass_chars_len = pass_chars_len;
-      // Resize pass_chars so it can fit upper_chars
-      pass_chars_len += 26;
-      pass_chars = realloc(pass_chars, pass_chars_len);
-      // Append the spec_chars to the pass_chars
-      for (int i = 0; i < spec_chars_len; i++) {
-        pass_chars[i + prev_pass_chars_len - 1] = spec_chars[i];
-      }
+      append_to_pass_chars(upper_chars, letters_len, pass_chars, &pass_chars_len);
+    }
+    if(nums){
+      append_to_pass_chars(num_chars, nums_len, pass_chars, &pass_chars_len);
+    }
+    if(spaces){
+      char space[1] = {' '};
+      append_to_pass_chars(space, 1, pass_chars, &pass_chars_len);
     }
 		// Keep choosing a random character from that array until you have the password length
+    srand(time(NULL));
+    char generated_pass[pass_len];
+    for(int i = 0; i < pass_len; i++){
+      // Get random number from 0 to pass_chars_len - 1
+      int rand_num = rand() % pass_chars_len;
+      // Get a random number from pass_chars and set it equal to the next generated_pass character
+      generated_pass[i] = pass_chars[rand_num];
+    }
 		// Print out the generated password
+    printf("%s\n", generated_pass);
 }
 
 
@@ -101,23 +105,14 @@ bool ask_char_type(char *ask_message){
   return false; 
 }
 
-char *get_input(){
-  char *input_str = malloc(sizeof(char));
-  if(input_str == NULL){
-    return NULL;
+void append_to_pass_chars(char *chars_array, int chars_array_len, char *pass_chars, int *pass_chars_len){
+  // get the previous pass_chars_len
+  int prev_pass_chars_len = *pass_chars_len;
+  // Resize pass_chars so it can fit the chars_array
+  *pass_chars_len += chars_array_len;
+  pass_chars = realloc(pass_chars, *pass_chars_len);
+  // Append the chars_array to the pass_chars
+  for (int i = 0; i < chars_array_len; i++) {
+    pass_chars[i + prev_pass_chars_len - 1] = chars_array[i];
   }
-
-  int c;
-  int i = 0;
-  while((c = getchar()) != '\n' && c != EOF){
-    input_str[i] = c;
-    input_str = realloc(input_str, (i+2) * sizeof(char));
-    if(input_str == NULL){
-      free(input_str);
-      return NULL;
-    }
-    i++;
-  }
-  input_str[i] = '\0';
-  return input_str;
 }
