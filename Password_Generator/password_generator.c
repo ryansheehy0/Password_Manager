@@ -57,19 +57,25 @@ int main(void){
     }
 		// Keep choosing a random character from that array until you have the password length
     srand(time(NULL));
-    char generated_pass[pass_len];
+    char generated_pass[pass_len + 1];
     for(int i = 0; i < pass_len; i++){
       // Get random number from 0 to pass_chars_len - 1
       int rand_num = rand() % pass_chars_len;
       // Get a random number from pass_chars and set it equal to the next generated_pass character
       generated_pass[i] = pass_chars[rand_num];
     }
+    // Add null terminating char
+    generated_pass[pass_len] = '\0';
+
 		// Print out the generated password
     printf("%s\n", generated_pass);
+
+    // free memory
+    free(pass_chars);
 }
 
 
-long get_password_length(){
+long get_pass_len(){
   printf("Enter length of password: ");
   char *length_str = get_input();
   char *endptr;
@@ -95,7 +101,7 @@ bool ask_char_type(char *ask_message){
     if(!is_first){
       printf("Must be 'y' or 'n'.\n");
     }
-    printf("Can the password have %s?(y/n): ", ask_message);
+    printf("Can the password have %s(y/n): ", ask_message);
     scanf(" %c", &char_type);
     is_first = false;
   }while(char_type != 'y' && char_type != 'Y' && char_type != 'n' && char_type != 'N');
@@ -113,6 +119,6 @@ void append_to_pass_chars(char *chars_array, int chars_array_len, char *pass_cha
   pass_chars = realloc(pass_chars, *pass_chars_len);
   // Append the chars_array to the pass_chars
   for (int i = 0; i < chars_array_len; i++) {
-    pass_chars[i + prev_pass_chars_len - 1] = chars_array[i];
+    pass_chars[i + prev_pass_chars_len] = chars_array[i];
   }
 }
