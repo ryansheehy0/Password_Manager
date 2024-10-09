@@ -2,15 +2,18 @@
 #include <string>
 #include <vector>
 
+/*
 #include "password.h"
 #include "fileToVector.h"
 // Operations
 #include "Operations/getPassword.h"
+*/
 
 const std::string FILE_NAME = "passwords.txt";
 
 enum class Operation {
-	GET_PASSWORD = 1,
+	EXIT,
+	GET_PASSWORD,
 	DELETE_PASSWORD,
 	ADD_PASSWORD,
 	UPDATE_PASSWORD,
@@ -18,12 +21,16 @@ enum class Operation {
 };
 
 int main() {
+	/*
 	std::vector<Password> passwords = fileToVector(FILE_NAME);
 	std::string masterPassword;
 	std::cout << "Master Password: ";
 	std::cin >> masterPassword;
+	*/
 
 	while (true) {
+		std::cout << "\n";
+		std::cout << "0) Exit\n";
 		std::cout << "1) Get Password\n";
 		std::cout << "2) Delete Password\n";
 		std::cout << "3) Add Password\n";
@@ -35,6 +42,8 @@ int main() {
 		Operation operation = static_cast<Operation>(tempOperation);
 
 		switch (operation) {
+			case Operation::EXIT:
+				return 1;
 			case Operation::GET_PASSWORD:
 				std::cout << "Get password\n";
 				break;
@@ -51,8 +60,8 @@ int main() {
 				std::cout << "Generate password\n";
 				break;
 			default:
-				std::cout << "Has to be between 1 and 5.\n";
-				return 1;
+				std::cout << "Has to be a number.\n";
+				continue;
 		}
 	}
 }
