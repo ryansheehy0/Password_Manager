@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <string>
+#include <iostream>
 
 Password* Password::createFromPassword(int64_t id, std::string name, std::string username, std::string password) {
 	std::string encryptedName = _encrypt("name", name);
@@ -17,32 +18,44 @@ Password* Password::createFromEncryptedPassword(int64_t id, std::string encrypte
 	return new Password(id, name, username, password, encryptedName, encryptedUsername, encryptedPassword);
 }
 
-void Password::print() {
+void Password::print() const {
 	std::cout << "Name    : " << _name << "\n";
 	std::cout << "Username: " << _name << "\n";
 	std::cout << "Password: " << _name << "\n";
 }
 
-void Password::update(int64_t id, std::string name, std::string username, std::string password) {
-	_id = id;
- _name = name;
- _username = username;
- _password = password;
+void Password::updateName(std::string name) {
+	_name = name;
+	_encryptedName = _encrypt("name", name);
+}
+
+void Password::updateUsername(std::string username) {
+	_username = username;
+	_encryptedUsername = _encrypt("username", username);
+}
+
+void Password::updatePassword(std::string password) {
+	_password = password;
+	_encryptedPassword = _encrypt("password", password);
+}
+
+std::string Password::_simpleEncryption(std::string value1, std::string value2) {
+	std::string encryptedString = "";
+	for (int64_t i = 0; i < value1.size(); i++) {
+		char asciiChar1 = value1[i];
+		char asciiChar2 = value2[i];
+		// The keyboard chars are ascii chars from 32-176
+		char keyboardChar1 = asciiChar1 - 32;
+		char keyboardChar2 = asciiChar2 - 32;
+		char keyboardEncryptedChar = keyboardChar1 + keyboardChar2;
+		if (keyboardEncryptedChar > (176-32)) keyboardEncryptedChar %= (176-32 + 1);
+		char asciiEncryptedChar = keyboardEncryptedChar + 32;
+		encryptedString += asciiEncryptedChar;
+	}
+	return encryptedString;
 }
 
 /*
-		int64_t _id;
-		std::string _name;
-		std::string _encryptedName;
-		std::string _username;
-		std::string _encryptedUsername;
-		std::string _password;
-		std::string _encryptedPassword;
-
-		Password();
-
-		Password(int64_t id, std::string name, std::string username, std::string password, std::string encryptedName, std::string encryptedUsername, std::string encryptedPassword) : _id(id), _name(name), _username(username), _password(password), _encryptedName(encryptedName), _encryptedUsername(encryptedUsername), _encryptedPassword(encryptedPassword) {}
-
 		std::string _encrypt(std::string fieldName, std::string value);
 		std::string _decrypt(std::string fieldName, std::string encryptedValue);
 
@@ -50,18 +63,5 @@ void Password::update(int64_t id, std::string name, std::string username, std::s
 
 		std::string _simpleEncryption(std::string value1, std::string value2);
 		std::string _simpleDecryption(std::string value1, std::string value2);
-
-	public:
-		static Password* createFromPassword(int64_t id, std::string name, std::string username, std::string password);
-		static Password* createFromEncryptedPassword(int64_t id, std::string encryptedName, std::string encryptedUsername, std::string encryptedPassword);
-
-		void print();
-
-		void updateName(std::string name);
-		void updateUsername(std::string username);
-		void updatePassword(std::string password);
-
-		std::string name();
-		int64_t id();
 };
 */

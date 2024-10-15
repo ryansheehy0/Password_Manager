@@ -16,24 +16,24 @@ class Password {
 		Password();
 		Password(int64_t id, std::string name, std::string username, std::string password, std::string encryptedName, std::string encryptedUsername, std::string encryptedPassword) : _id(id), _name(name), _username(username), _password(password), _encryptedName(encryptedName), _encryptedUsername(encryptedUsername), _encryptedPassword(encryptedPassword) {}
 
-		std::string _encrypt(std::string fieldName, std::string value);
-		std::string _decrypt(std::string fieldName, std::string encryptedValue);
+		static std::string _encrypt(std::string fieldName, std::string value);
+		static std::string _decrypt(std::string fieldName, std::string encryptedValue);
 
-		std::string _hash(std::string value);
+		static std::string _hash(std::string value);
 
-		std::string _simpleEncryption(std::string value1, std::string value2);
-		std::string _simpleDecryption(std::string value1, std::string value2);
+		static std::string _simpleEncryption(std::string value1, std::string value2);
+		static std::string _simpleDecryption(std::string value1, std::string value2);
 
 	public:
 		static Password* createFromPassword(int64_t id, std::string name, std::string username, std::string password);
 		static Password* createFromEncryptedPassword(int64_t id, std::string encryptedName, std::string encryptedUsername, std::string encryptedPassword);
 
-		void print();
+		void print() const;
 
 		void updateName(std::string name);
 		void updateUsername(std::string username);
 		void updatePassword(std::string password);
 
-		std::string name();
-		int64_t id();
+		std::string name() const {return _name;};
+		int64_t id() const {return _id;};
 };
