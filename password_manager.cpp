@@ -2,6 +2,11 @@
 #include <string>
 #include <vector>
 
+/*To Do:
+	- Make sure to prevent tabs from being imputed
+	- Use getline instead of cin to allow for spaces
+*/
+
 /*
 #include "password.h"
 #include "fileToVector.h"

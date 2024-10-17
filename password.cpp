@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <iostream>
+#include <openssl/sha.h>
 
 Password* Password::createFromPassword(int64_t id, std::string name, std::string username, std::string password) {
 	std::string encryptedName = _encrypt("name", name);
@@ -47,21 +48,40 @@ std::string Password::_simpleEncryption(std::string value1, std::string value2) 
 		// The keyboard chars are ascii chars from 32-176
 		char keyboardChar1 = asciiChar1 - 32;
 		char keyboardChar2 = asciiChar2 - 32;
-		char keyboardEncryptedChar = keyboardChar1 + keyboardChar2;
-		if (keyboardEncryptedChar > (176-32)) keyboardEncryptedChar %= (176-32 + 1);
-		char asciiEncryptedChar = keyboardEncryptedChar + 32;
+		char encryptedKeyboardChar = keyboardChar1 + keyboardChar2;
+		const int64_t MAX_KEYBOARD_CHAR_VALUE = 176 - 32;
+		if (encryptedKeyboardChar > MAX_KEYBOARD_CHAR_VALUE) encryptedKeyboardChar %= (MAX_KEYBOARD_CHAR_VALUE + 1);
+		char asciiEncryptedChar = encryptedKeyboardChar + 32;
 		encryptedString += asciiEncryptedChar;
 	}
 	return encryptedString;
 }
 
+std::string Password::_simpleDecryption(std::string encryptedValue1, std::string encryptedValue2) {
+	std::string decryptedString = "";
+	for (int64_t i = 0; i < encryptedValue1.size(); i++) {
+		char encryptedAsciiChar1 = encryptedValue1[i];
+		char encryptedAsciiChar2 = encryptedValue2[i];
+		// The keyboard chars are ascii chars from 32-176
+		char encryptedKeyboardChar1 = encryptedAsciiChar1 - 32;
+		char encryptedKeyboardChar2 = encryptedAsciiChar2 - 32;
+		char keyboardChar = encryptedKeyboardChar1 - encryptedKeyboardChar2;
+		const int64_t MAX_KEYBOARD_CHAR_VALUE = 176 - 32;
+		keyboardChar += MAX_KEYBOARD_CHAR_VALUE;
+		if (keyboardChar > MAX_KEYBOARD_CHAR_VALUE) keyboardChar %= (MAX_KEYBOARD_CHAR_VALUE + 1);
+		char asciiChar = keyboardChar + 32;
+		decryptedString += asciiChar;
+	}
+	return decryptedString;
+}
+
+std::string Password::_hash(std::string value) {
+
+}
 /*
 		std::string _encrypt(std::string fieldName, std::string value);
 		std::string _decrypt(std::string fieldName, std::string encryptedValue);
 
 		std::string _hash(std::string value);
-
-		std::string _simpleEncryption(std::string value1, std::string value2);
-		std::string _simpleDecryption(std::string value1, std::string value2);
 };
 */

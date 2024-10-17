@@ -22,7 +22,7 @@ class Password {
 		static std::string _hash(std::string value);
 
 		static std::string _simpleEncryption(std::string value1, std::string value2);
-		static std::string _simpleDecryption(std::string value1, std::string value2);
+		static std::string Password::_simpleDecryption(std::string encryptedValue1, std::string encryptedValue2);
 
 	public:
 		static Password* createFromPassword(int64_t id, std::string name, std::string username, std::string password);
