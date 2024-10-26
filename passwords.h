@@ -11,6 +11,7 @@ class Passwords {
 	private:
 		std::vector<Password*> _passwords;
 		std::string _fileName;
+		std::string _masterPassword;
 
 		int64_t _askUserForPasswordIndex();
 

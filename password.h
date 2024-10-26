@@ -12,17 +12,19 @@ class Password {
 		std::string _encryptedUsername;
 		std::string _password;
 		std::string _encryptedPassword;
+		std::string _masterPassword;
 
 		Password();
-		Password(int64_t id, std::string name, std::string username, std::string password, std::string encryptedName, std::string encryptedUsername, std::string encryptedPassword) : _id(id), _name(name), _username(username), _password(password), _encryptedName(encryptedName), _encryptedUsername(encryptedUsername), _encryptedPassword(encryptedPassword) {}
+		Password(int64_t id, std::string name, std::string username, std::string password, std::string encryptedName, std::string encryptedUsername, std::string encryptedPassword, std::string masterPassword);
 
-		static std::string _encrypt(std::string fieldName, std::string value);
-		static std::string _decrypt(std::string fieldName, std::string encryptedValue);
-
-		static std::string _hash(std::string value);
+		static std::string _encrypt(std::string fieldName, std::string fieldValue, std::string masterPassword, int64_t id);
+		static std::string _decrypt(std::string fieldName, std::string encryptedFieldValue, std::string masterPassword, int64_t id);
 
 		static std::string _simpleEncryption(std::string value1, std::string value2);
 		static std::string Password::_simpleDecryption(std::string encryptedValue1, std::string encryptedValue2);
+
+		static std::string _sha512(const std::string& input);
+		static std::string _hash(std::string input);
 
 	public:
 		static Password* createFromPassword(int64_t id, std::string name, std::string username, std::string password);
