@@ -3,8 +3,9 @@
 #include <vector>
 
 /*To Do:
-	- Make sure to prevent tabs from being imputed
-	- Use getline instead of cin to allow for spaces
+	- Make sure to prevent tabs from being imputed for field values
+	- Redo Password constructor in Passwords and add new
+	- Redo Password class.
 */
 
 /*

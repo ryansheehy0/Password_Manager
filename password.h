@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <string>
 
+// Need to save to file. Needs file name
+// Remove static and have boolean encrypted as argument.
+
 class Password {
 	private:
 		int64_t _id;
@@ -13,9 +16,7 @@ class Password {
 		std::string _password;
 		std::string _encryptedPassword;
 		std::string _masterPassword;
-
-		Password();
-		Password(int64_t id, std::string name, std::string username, std::string password, std::string encryptedName, std::string encryptedUsername, std::string encryptedPassword, std::string masterPassword);
+		std::string _fileName;
 
 		static std::string _encrypt(std::string fieldName, std::string fieldValue, std::string masterPassword, int64_t id);
 		static std::string _decrypt(std::string fieldName, std::string encryptedFieldValue, std::string masterPassword, int64_t id);
@@ -27,14 +28,15 @@ class Password {
 		static std::string _hash(std::string input);
 
 	public:
-		static Password* createFromPassword(int64_t id, std::string name, std::string username, std::string password);
-		static Password* createFromEncryptedPassword(int64_t id, std::string encryptedName, std::string encryptedUsername, std::string encryptedPassword);
+		Password(bool encryptedInput, int64_t id, std::string name, std::string username, std::string password);
 
 		void print() const;
 
 		void updateName(std::string name);
 		void updateUsername(std::string username);
 		void updatePassword(std::string password);
+
+		std::string getEncryptedPassword() const;
 
 		std::string name() const {return _name;};
 		int64_t id() const {return _id;};

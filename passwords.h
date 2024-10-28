@@ -5,7 +5,8 @@
 #include <cstdint>
 #include <vector>
 #include <string>
-#include <fstream>
+// Need to change the file when there's a change.
+	// Rewrite the whole file
 
 class Passwords {
 	private:
@@ -13,20 +14,17 @@ class Passwords {
 		std::string _fileName;
 		std::string _masterPassword;
 
-		int64_t _askUserForPasswordIndex();
+		int64_t _askForPasswordIndex() const;
+		std::string _askForStringField(std::string fieldName) const;
+		bool _doYouWantToUpdateField(std::string fieldName) const;
 
-		int64_t Passwords::_getIdField(std::ifstream* inputFile, int64_t* lineNum);
-		std::string Passwords::_getStringField(std::ifstream* inputFile, int64_t* lineNum);
-
-		std::string _askForStringField(std::string fieldName);
-
-		bool _doYouWantToUpdateField(std::string fieldName);
+		void writeToFile() const;
 
 	public:
-		Passwords(std::string fieldName);
+		Passwords(std::string fileName, std::string materPassword);
 		~Passwords();
 
-		void getPassword();
+		void printPassword() const;
 		void deletePassword();
 		void addPassword();
 		void updatePassword();

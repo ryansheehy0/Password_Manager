@@ -29,18 +29,16 @@ Encrypt
 
 ```
 hash(id + fieldName + masterPassword) -> ---------------hash---------------
-                                         ------------field text------------
+                                         -----------field value------------
                          simpleEncryption__________________________________
-                                         ----------encrypted text----------
+                                         ---------encrypted value----------
 ```
 
 Decrypt
 
 ```
 hash(id + fieldName + masterPassword) -> ---------------hash---------------
-                                         ----------encrypted text----------
+                                         ---------encrypted value----------
                          simpleDecryption__________________________________
-                                         ------------field text------------
+                                         -----------field value------------
 ```
-
-### Simple Encryption/Decryption
