@@ -3,9 +3,10 @@
 #include <vector>
 
 /*To Do:
-	- Make sure to prevent tabs from being imputed for field values
-	- Redo Password constructor in Passwords and add new
-	- Redo Password class.
+	- Add passwords code to password_manager
+	- Write simple encryption diagram in read me
+	- Test each of the classes
+	- Make sure user interface is correct
 */
 
 /*

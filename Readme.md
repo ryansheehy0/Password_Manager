@@ -42,3 +42,6 @@ hash(id + fieldName + masterPassword) -> ---------------hash---------------
                          simpleDecryption__________________________________
                                          -----------field value------------
 ```
+
+### Simple encryption/decryption
+- Just put the example here

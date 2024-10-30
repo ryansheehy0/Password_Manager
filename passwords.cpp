@@ -38,7 +38,7 @@ Passwords::Passwords(std::string fileName, std::string masterPassword) : _fileNa
 			exit(1);
 		}
 		// Create new password on the heap
-		Password* newPasswordPtr = Password::createFromEncryptedPassword(id, encryptedName, encryptedUsername, encryptedPassword);
+		Password* newPasswordPtr = new Password(true/*encrypted*/, id, encryptedName, encryptedUsername, encryptedPassword, masterPassword);
 		// Add new password onto the passwords
 		_passwords.push_back(newPasswordPtr);
 	}
@@ -67,7 +67,7 @@ int64_t Passwords::_askForPasswordIndex() const {
 	if (!(input >= 0 && input < _passwords.size())) {
 		return -1; // Invalid input
 	}
-	// Return the correct password
+	// Return the password index
 	return input;
 }
 
@@ -76,7 +76,13 @@ std::string Passwords::_askForStringField(std::string fieldName) const {
 	// Repeatedly ask for the field value until it's correct
 	while (true) {
 		std::cout << "Password's " << fieldName << ": ";
-		std::cin >> fieldValue;
+		std::getline(std::cin, fieldValue); // Allow for whitespace
+		// Make sure fieldValue doesn't have any tabs
+		if (fieldValue.find('\t') != std::string::npos) {
+			std::cout << fieldName << " cannot include tabs.\n";
+			continue;
+		}
+		// Make sure fieldValue is the correct length
 		if (fieldValue.size() > 64) {
 			std::cout << fieldName << " must be less than or equal to 64 characters.\n";
 			continue;
@@ -110,9 +116,12 @@ void Passwords::writeToFile() const {
 		std::cout << "Error opening " << _fileName << "\n";
 		exit(1);
 	}
-	// Write passwords to inputFile
+	// Write passwords to output file
 	for (Password* password : _passwords) {
-		outputFile << password->getEncryptedPassword();
+		outputFile << password->id() << "\n"
+							 << password->encryptedName() << "\n"
+							 << password->encryptedUsername() << "\n"
+							 << password->encryptedPassword() << "\n";
 	}
 	// Close file
 	outputFile.close();
@@ -130,8 +139,12 @@ void Passwords::printPassword() const {
 void Passwords::deletePassword() {
 	int64_t passwordIndex = _askForPasswordIndex();
 	if (passwordIndex == -1) return;
-	delete _passwords[passwordIndex]; // Remove from heap
-	_passwords.erase(_passwords.begin() + passwordIndex); // Remove from vector
+	// Remove from heap
+	delete _passwords[passwordIndex];
+	// Remove from vector
+	_passwords.erase(_passwords.begin() + passwordIndex);
+	// Write passwords to file
+	writeToFile();
 }
 
 void Passwords::addPassword() {
@@ -145,9 +158,11 @@ void Passwords::addPassword() {
 	std::string username = _askForStringField("username");
 	std::string password = _askForStringField("password");
 	// Create new password on the heap
-	Password* newPasswordPtr = Password::createFromPassword(id, name, username, password);
+	Password* newPasswordPtr = new Password(false/*Encrypted*/, id, name, username, password, _masterPassword);
 	// Add new password onto the vector
 	_passwords.push_back(newPasswordPtr);
+	// Write passwords to file
+	writeToFile();
 }
 
 void Passwords::updatePassword() {
@@ -167,4 +182,6 @@ void Passwords::updatePassword() {
 		std::string newPassword = _askForStringField("new password");
 		_passwords[passwordIndex]->updatePassword(newPassword);
 	}
+	// Write passwords to file
+	writeToFile();
 }

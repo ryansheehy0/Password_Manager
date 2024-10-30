@@ -3,9 +3,6 @@
 #include <cstdint>
 #include <string>
 
-// Need to save to file. Needs file name
-// Remove static and have boolean encrypted as argument.
-
 class Password {
 	private:
 		int64_t _id;
@@ -16,28 +13,30 @@ class Password {
 		std::string _password;
 		std::string _encryptedPassword;
 		std::string _masterPassword;
-		std::string _fileName;
 
-		static std::string _encrypt(std::string fieldName, std::string fieldValue, std::string masterPassword, int64_t id);
-		static std::string _decrypt(std::string fieldName, std::string encryptedFieldValue, std::string masterPassword, int64_t id);
+		std::string _encrypt(std::string fieldName, std::string fieldValue);
+		std::string _decrypt(std::string fieldName, std::string encryptedFieldValue);
 
-		static std::string _simpleEncryption(std::string value1, std::string value2);
-		static std::string Password::_simpleDecryption(std::string encryptedValue1, std::string encryptedValue2);
+		std::string _simpleEncryption(std::string value1, std::string value2);
+		std::string _simpleDecryption(std::string encryptedValue1, std::string encryptedValue2);
 
-		static std::string _sha512(const std::string& input);
-		static std::string _hash(std::string input);
+		std::string _sha512(const std::string& input);
+		std::string _hash(std::string input);
 
 	public:
-		Password(bool encryptedInput, int64_t id, std::string name, std::string username, std::string password);
+		Password(bool encryptedInput, int64_t id, std::string name, std::string username, std::string password, std::string masterPassword);
 
 		void print() const;
 
-		void updateName(std::string name);
-		void updateUsername(std::string username);
-		void updatePassword(std::string password);
+		void updateName(std::string newName);
+		void updateUsername(std::string newUsername);
+		void updatePassword(std::string newPassword);
 
-		std::string getEncryptedPassword() const;
-
-		std::string name() const {return _name;};
-		int64_t id() const {return _id;};
+		int64_t id() const {return _id;}
+		std::string name() const {return _name;}
+		std::string encryptedName() const {return _encryptedName;}
+		std::string username() const {return _username;}
+		std::string encryptedUsername() const {return _encryptedUsername;}
+		std::string password() const {return _password;}
+		std::string encryptedPassword() const {return _encryptedPassword;}
 };
