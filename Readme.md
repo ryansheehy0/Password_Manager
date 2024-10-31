@@ -1,6 +1,8 @@
 # Password Manager
 A CLI password manger that uses a very secure and simple encryption algorithm.
 
+
+
 ## How it works
 Imagine you had a combination lock, but instead of the dials being from 0-9, they are all the characters you can type on the keyboard (except for the tab key). Now, imagine that the lock doesn't have 4, but 64 different dials.
 
@@ -43,5 +45,28 @@ hash(id + fieldName + masterPassword) -> ---------------hash---------------
                                          -----------field value------------
 ```
 
-### Simple encryption/decryption
-- Just put the example here
+### Simple encryption/decryption example
+
+|          |      |
+|:---------|:----:|
+| Input 1: | This |
+| Input 2: | abca |
+
+| Encrypt             |                     |                     |                     |
+|---------------------|---------------------|---------------------|---------------------|
+| T: 84 - 32 = 52     | h: 104 - 32 = 72    | i: 105 - 32 = 73    | s: 115 - 32 = 83    |
+| a: 97 - 32 = 65     | b: 98  - 32 = 66    | c: 99  - 32 = 67    | a: 97  - 32 = 65    |
+| 52 + 65 = 117       | 72 + 66 = 138       | 73 + 67 = 140       | 83 + 65 = 148       |
+| 117 % (127-32) = 22 | 138 % (127-32) = 43 | 140 % (127-32) = 45 | 148 % (127-32) = 53 |
+| 22 + 32 = 54        | 43 + 32 = 75        | 45 + 32 = 77        | 53 + 32 = 85        |
+| 6                   | K                   | M                   | U                   |
+
+| Decrypt             |                     |                     |                     |
+|---------------------|---------------------|---------------------|---------------------|
+| 6: 54 - 32 = 22     | K: 75 - 32 = 43     | M: 77 - 32 = 45     | U: 85 - 32 = 53     |
+| a: 97 - 32 = 65     | b: 98  - 32 = 66    | c: 99  - 32 = 67    | a: 97  - 32 = 65    |
+| 22 - 65 = -43       | 43 - 66 = -23       | 45 - 67 = -22       | 53 - 65 = -12       |
+| -43 + (127-32) = 52 | -23 + (127-32) = 72 | -22 + (127-32) = 73 | -12 + (127-32) = 83 |
+| 52 % (127-32) = 52  | 72 % (127-32) = 72  | 73 % (127-32) = 73  | 83 % (127-32) = 83  |
+| 52 + 32 = 84        | 72 + 32 = 104       | 73 + 32 = 105       | 83 + 32 = 115       |
+| T                   | h                   | i                   | s                   |

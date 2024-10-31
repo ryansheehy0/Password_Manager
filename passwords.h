@@ -1,12 +1,9 @@
 #pragma once
 
 #include "password.h"
-
 #include <cstdint>
 #include <vector>
 #include <string>
-// Need to change the file when there's a change.
-	// Rewrite the whole file
 
 class Passwords {
 	private:
