@@ -1,4 +1,4 @@
-#include "generate_password.h"
+#include "../Include/generate_password.h"
 #include <iostream>
 #include <openssl/rand.h>
 

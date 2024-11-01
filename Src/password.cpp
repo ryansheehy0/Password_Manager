@@ -1,12 +1,11 @@
-#include "password.h"
-
+#include "../Include/password.h"
+#include "../Include/ascii_keyboard_char.h"
 #include <iostream>
 #include <string>
 #include <openssl/sha.h>
 #include <sstream>
 #include <iomanip>
 #include <cstdint>
-#include "ascii_keyboard_char.h"
 
 // Constructor/Destructor-------------------------------------------------------
 

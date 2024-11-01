@@ -1,5 +1,4 @@
-#include "passwords.h"
-
+#include "../Include/passwords.h"
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -75,8 +74,9 @@ std::string Passwords::_askForStringField(std::string fieldName) const {
 	std::string fieldValue;
 	// Repeatedly ask for the field value until it's correct
 	while (true) {
-		std::cout << "Password's " << fieldName << ": ";
+		std::cout << "  Password's " << fieldName << ": ";
 		std::getline(std::cin, fieldValue); // Allow for whitespace
+		std::cout << "\tYou entered: " << fieldValue << "\n";
 		// Make sure fieldValue doesn't have any tabs
 		if (fieldValue.find('\t') != std::string::npos) {
 			std::cout << fieldName << " cannot include tabs.\n";
