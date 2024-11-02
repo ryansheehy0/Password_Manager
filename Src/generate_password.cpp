@@ -5,9 +5,8 @@
 // Private:---------------------------------------------------------------------
 bool GeneratePassword::_doYouWantToInclude(std::string str) {
 	std::cout << "Do you want to include " << str << "? (y/n): ";
-	char result;
-	std::cin >> result;
-	switch (result) {
+	std::string line; getline(std::cin, line);
+	switch (line[0]) {
 		case 'Y':
 		case 'y':
 			return true;
@@ -19,7 +18,11 @@ bool GeneratePassword::_doYouWantToInclude(std::string str) {
 
 int8_t GeneratePassword::_randomByte() {
 	unsigned char randomByte;
-	return RAND_bytes(&randomByte, 1);
+	if (RAND_bytes(&randomByte, 1)) {
+		return randomByte;
+	} else {
+		throw std::runtime_error("Failed to generate random password.");
+	}
 }
 
 char GeneratePassword::_randomChar(std::string str) {
@@ -40,7 +43,7 @@ std::string GeneratePassword::_generateRandomPassword(int64_t length, bool inclu
 	if (includeSpaces) usableCharacters += " ";
 	// Generate random password
 	std::string randomPassword = "";
-	for (int i = 0; i < length + 1; i++) {
+	for (int i = 0; i < length; i++) {
 		randomPassword += _randomChar(usableCharacters);
 	}
 	// Return random password
@@ -52,10 +55,19 @@ std::string GeneratePassword::_generateRandomPassword(int64_t length, bool inclu
 void GeneratePassword::generatePassword() {
 	std::cout << "Password length (max 64 characters): ";
 	int64_t length;
-	std::cin >> length;
+	std::string line; getline(std::cin, line);
+	try {
+		length = std::stoi(line);
+	} catch(...) {
+		length = 64;
+	}
 	bool includeUpperCase = _doYouWantToInclude("upper case characters");
 	bool includeNumbers = _doYouWantToInclude("numbers");
 	bool includeSpecialChars = _doYouWantToInclude("special characters");
 	bool includeSpaces = _doYouWantToInclude("spaces");
-	std::cout << _generateRandomPassword(length, includeUpperCase, includeNumbers, includeSpecialChars, includeSpaces);
+	try {
+		std::cout << _generateRandomPassword(length, includeUpperCase, includeNumbers, includeSpecialChars, includeSpaces);
+	} catch(std::runtime_error e) {
+		std::cout << e.what() << "\n";
+	}
 }

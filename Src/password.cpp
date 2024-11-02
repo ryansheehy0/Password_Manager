@@ -51,7 +51,8 @@ std::string Password::_decrypt(std::string fieldName, std::string encryptedField
 	return _simpleDecryption(hash, encryptedFieldValue);
 }
 
-std::string Password::_simpleEncryption(std::string value1, std::string value2) { // The length of value1 is assumed to be the same as value2
+std::string Password::_simpleEncryption(std::string value1, std::string value2) {
+	// The length of value1 is assumed to be the same as value2
 	std::string encryptedString = "";
 	// Loop through each character
 	for (int64_t i = 0; i < value1.size(); i++) {
@@ -76,7 +77,8 @@ std::string Password::_simpleEncryption(std::string value1, std::string value2) 
 	return encryptedString;
 }
 
-std::string Password::_simpleDecryption(std::string encryptedValue1, std::string encryptedValue2) { // The length of value1 is assumed to be the same as value2
+std::string Password::_simpleDecryption(std::string encryptedValue1, std::string encryptedValue2) {
+	// The length of value1 is assumed to be the same as value2
 	std::string decryptedString = "";
 	// Loop through each character
 	for (int64_t i = 0; i < encryptedValue1.size(); i++) {

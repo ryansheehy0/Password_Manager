@@ -7,8 +7,6 @@
 #include <unistd.h>
 
 /*To Do:
-	- Make sure all inputs can handle spaces without breaking
-		- Enter should still register. Maybe change things to getline?
 	- Test each of the classes
 	- Make sure user interface is correct
 */
@@ -22,7 +20,8 @@ enum class Operation {
 	DELETE_PASSWORD,
 	ADD_PASSWORD,
 	UPDATE_PASSWORD,
-	GENERATE_PASSWORD
+	GENERATE_PASSWORD,
+	EXIT
 };
 
 int main() {
@@ -40,10 +39,13 @@ int main() {
 		std::cout << "3) Update Password\n";
 		std::cout << "4) Generate Password\n";
 		std::cout << "What would you like to do? ";
-		std::string tempOperation;
-		std::getline(std::cin, tempOperation);
-		
-		Operation operation = static_cast<Operation>(std::stoi(tempOperation));
+		Operation operation;
+		std::string line; getline(std::cin, line);
+		try {
+			operation = static_cast<Operation>(std::stoi(line));
+		} catch(...) {
+			operation = Operation::EXIT;
+		}
 
 		switch (operation) {
 			case Operation::GET_PASSWORD:
@@ -61,6 +63,7 @@ int main() {
 			case Operation::GENERATE_PASSWORD:
 				GeneratePassword::generatePassword();
 				break;
+			case Operation::EXIT:
 			default:
 				return 1;
 		}
@@ -72,10 +75,9 @@ std::string hiddenInput() {
 	tcgetattr(STDIN_FILENO, &oldAttributes); // Get current terminal attributes
 	newAttributes = oldAttributes;
 	newAttributes.c_lflag &= ~ECHO; // Disable echo
-	tcsetattr(STDIN_FILENO, TCSANOW, &newAttributes);
-	std::string input;
-	std::getline(std::cin, input);
+	tcsetattr(STDIN_FILENO, TCSANOW, &newAttributes); // Implement new terminal attributes
+	std::string line; getline(std::cin, line);
 	tcsetattr(STDIN_FILENO, TCSANOW, &oldAttributes); // Restore terminal attributes
-	std::cout << std::endl;
-	return input;
+	std::cout << "\n";
+	return line;
 }

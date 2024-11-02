@@ -62,7 +62,12 @@ int64_t Passwords::_askForPasswordIndex() const {
 	// Get user's input
 	std::cout << "Which password do you want to select? ";
 	int64_t input;
-	std::cin >> input;
+	std::string line; getline(std::cin, line);
+	try {
+		input = std::stoi(line);
+	} catch (...) {
+		return -1; // Invalid input
+	}
 	if (!(input >= 0 && input < _passwords.size())) {
 		return -1; // Invalid input
 	}
@@ -75,7 +80,7 @@ std::string Passwords::_askForStringField(std::string fieldName) const {
 	// Repeatedly ask for the field value until it's correct
 	while (true) {
 		std::cout << "  Password's " << fieldName << ": ";
-		std::getline(std::cin, fieldValue); // Allow for whitespace
+		getline(std::cin, fieldValue); // Allow for whitespace
 		std::cout << "\tYou entered: " << fieldValue << "\n";
 		// Make sure fieldValue doesn't have any tabs
 		if (fieldValue.find('\t') != std::string::npos) {
@@ -98,9 +103,8 @@ std::string Passwords::_askForStringField(std::string fieldName) const {
 
 bool Passwords::_doYouWantToUpdateField(std::string fieldName) const {
 	std::cout << "Do you want to update the " << fieldName << "? (y/n): ";
-	char response;
-	std::cin >> response;
-	switch (response) {
+	std::string line; getline(std::cin, line);
+	switch (line[0]) {
 		case 'y':
 		case 'Y':
 			return true;
@@ -158,7 +162,7 @@ void Passwords::addPassword() {
 	std::string username = _askForStringField("username");
 	std::string password = _askForStringField("password");
 	// Create new password on the heap
-	Password* newPasswordPtr = new Password(false/*Encrypted*/, id, name, username, password, _masterPassword);
+	Password* newPasswordPtr = new Password(false/*Not encrypted*/, id, name, username, password, _masterPassword);
 	// Add new password onto the vector
 	_passwords.push_back(newPasswordPtr);
 	// Write passwords to file
