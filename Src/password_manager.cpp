@@ -7,8 +7,10 @@
 #include <unistd.h>
 
 /*To Do:
-	- Test each of the classes
 	- Make sure user interface is correct
+		- Add new lines between things
+		- Add indentations in between things
+	- Test each of the classes
 */
 
 std::string hiddenInput();

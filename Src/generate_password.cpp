@@ -16,7 +16,7 @@ bool GeneratePassword::_doYouWantToInclude(std::string str) {
 	}
 }
 
-int8_t GeneratePassword::_randomByte() {
+uint8_t GeneratePassword::_randomByte() {
 	unsigned char randomByte;
 	if (RAND_bytes(&randomByte, 1)) {
 		return randomByte;
@@ -53,21 +53,22 @@ std::string GeneratePassword::_generateRandomPassword(int64_t length, bool inclu
 // Public:----------------------------------------------------------------------
 
 void GeneratePassword::generatePassword() {
-	std::cout << "Password length (max 64 characters): ";
-	int64_t length;
+	std::cout << "\nPassword length (max 64 characters): ";
+	int64_t length = 64;
 	std::string line; getline(std::cin, line);
 	try {
 		length = std::stoi(line);
 	} catch(...) {
-		length = 64;
 	}
 	bool includeUpperCase = _doYouWantToInclude("upper case characters");
 	bool includeNumbers = _doYouWantToInclude("numbers");
 	bool includeSpecialChars = _doYouWantToInclude("special characters");
 	bool includeSpaces = _doYouWantToInclude("spaces");
+	std::cout << "\n";
 	try {
 		std::cout << _generateRandomPassword(length, includeUpperCase, includeNumbers, includeSpecialChars, includeSpaces);
 	} catch(std::runtime_error e) {
-		std::cout << e.what() << "\n";
+		std::cout << e.what();
 	}
+	std::cout << "\n";
 }
