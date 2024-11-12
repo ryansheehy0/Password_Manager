@@ -40,7 +40,9 @@ std::string Password::_encrypt(std::string fieldName, std::string fieldValue) {
 		fieldValue += " "; // Pad with spaces
 	}
 	// Return simple encryption
-	return _simpleEncryption(hash, fieldValue);
+	std::string se = _simpleEncryption(hash, fieldValue);
+	std::cout << "SE: " << se << "\n";
+	return se;
 }
 
 std::string Password::_decrypt(std::string fieldName, std::string encryptedFieldValue) {
@@ -52,24 +54,25 @@ std::string Password::_decrypt(std::string fieldName, std::string encryptedField
 }
 
 std::string Password::_simpleEncryption(std::string value1, std::string value2) {
+	std::cout << "Value1: " << value1 << "\n";
+	std::cout << "Value2: " << value2 << "\n";
 	// The length of value1 is assumed to be the same as value2
 	std::string encryptedString = "";
 	// Loop through each character
 	for (int64_t i = 0; i < value1.size(); i++) {
-		char asciiChar1 = value1[i];
-		char asciiChar2 = value2[i];
+		uint8_t asciiChar1 = value1[i];
+		uint8_t asciiChar2 = value2[i];
 		// Convert to keyboard chars. The keyboard chars are ascii chars from 32-176.
-		const int64_t MAX_KEYBOARD_CHAR_VALUE = 127 - 32;
-		char keyboardChar1 = asciiChar1 - 32;
-		char keyboardChar2 = asciiChar2 - 32;
-		// Encrypt to get encrypted keyboard chars
-		char encryptedKeyboardChar = keyboardChar1 + keyboardChar2;
+		const uint8_t MAX_KEYBOARD_CHAR_VALUE = 126 - 32;
+		uint8_t keyboardChar1 = asciiChar1 - 32;
+		uint8_t keyboardChar2 = asciiChar2 - 32;
+		uint8_t encryptedKeyboardChar = keyboardChar1 + keyboardChar2;
 		// Loop encrypted keyboard char if it overflows
 		if (encryptedKeyboardChar > MAX_KEYBOARD_CHAR_VALUE) {
 			encryptedKeyboardChar %= (MAX_KEYBOARD_CHAR_VALUE + 1);
 		}
 		// Convert keyboard back into ascii
-		char asciiEncryptedChar = encryptedKeyboardChar + 32;
+		uint8_t asciiEncryptedChar = encryptedKeyboardChar + 32;
 		// Add ascii encrypted char to encrypted string
 		encryptedString += asciiEncryptedChar;
 	}
@@ -82,21 +85,21 @@ std::string Password::_simpleDecryption(std::string encryptedValue1, std::string
 	std::string decryptedString = "";
 	// Loop through each character
 	for (int64_t i = 0; i < encryptedValue1.size(); i++) {
-		char encryptedAsciiChar1 = encryptedValue1[i];
-		char encryptedAsciiChar2 = encryptedValue2[i];
+		uint8_t encryptedAsciiChar1 = encryptedValue1[i];
+		uint8_t encryptedAsciiChar2 = encryptedValue2[i];
 		// Convert ascii chars to keyboard chars
-		const int64_t MAX_KEYBOARD_CHAR_VALUE = 127 - 32;
-		char encryptedKeyboardChar1 = encryptedAsciiChar1 - 32;
-		char encryptedKeyboardChar2 = encryptedAsciiChar2 - 32;
+		const uint8_t MAX_KEYBOARD_CHAR_VALUE = 126 - 32;
+		uint8_t encryptedKeyboardChar1 = encryptedAsciiChar1 - 32;
+		uint8_t encryptedKeyboardChar2 = encryptedAsciiChar2 - 32;
 		// Decrypt to get keyboard chars
-		char keyboardChar = encryptedKeyboardChar1 - encryptedKeyboardChar2;
+		uint8_t keyboardChar = encryptedKeyboardChar1 - encryptedKeyboardChar2;
 		keyboardChar += MAX_KEYBOARD_CHAR_VALUE;
 		// Loop decrypted keyboard char if it overflows
 		if (keyboardChar > MAX_KEYBOARD_CHAR_VALUE) {
 			keyboardChar %= (MAX_KEYBOARD_CHAR_VALUE + 1);
 		}
 		// Convert keyboard chars back into ascii
-		char asciiChar = keyboardChar + 32;
+		uint8_t asciiChar = keyboardChar + 32;
 		// Add ascii char to decrypted string
 		decryptedString += asciiChar;
 	}

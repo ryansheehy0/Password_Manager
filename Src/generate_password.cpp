@@ -3,6 +3,7 @@
 #include <openssl/rand.h>
 
 // Private:---------------------------------------------------------------------
+
 bool GeneratePassword::_doYouWantToInclude(std::string str) {
 	std::cout << "Do you want to include " << str << "? (y/n): ";
 	std::string line; getline(std::cin, line);

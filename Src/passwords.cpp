@@ -79,9 +79,8 @@ std::string Passwords::_askForStringField(std::string fieldName) const {
 	std::string fieldValue;
 	// Repeatedly ask for the field value until it's correct
 	while (true) {
-		std::cout << "  Password's " << fieldName << ": ";
+		std::cout << "Password's " << fieldName << ": ";
 		getline(std::cin, fieldValue); // Allow for whitespace
-		std::cout << "\tYou entered: " << fieldValue << "\n";
 		// Make sure fieldValue doesn't have any tabs
 		if (fieldValue.find('\t') != std::string::npos) {
 			std::cout << fieldName << " cannot include tabs.\n";
@@ -134,6 +133,7 @@ void Passwords::writeToFile() const {
 // Public:----------------------------------------------------------------------
 
 void Passwords::printPassword() const {
+	std::cout << "\n";
 	int64_t passwordIndex = _askForPasswordIndex();
 	if (passwordIndex == -1) return;
 	std::cout << "\n";
@@ -141,6 +141,7 @@ void Passwords::printPassword() const {
 }
 
 void Passwords::deletePassword() {
+	std::cout << "\n";
 	int64_t passwordIndex = _askForPasswordIndex();
 	if (passwordIndex == -1) return;
 	// Remove from heap
@@ -153,11 +154,12 @@ void Passwords::deletePassword() {
 
 void Passwords::addPassword() {
 	// Get the next id
-	int64_t id = 0;
+	uint64_t id = 0;
 	if (_passwords.size() != 0) {
 		id = _passwords[_passwords.size() - 1]->id() + 1;
 	}
 	// Get each of the fields
+	std::cout << "\n";
 	std::string name = _askForStringField("name");
 	std::string username = _askForStringField("username");
 	std::string password = _askForStringField("password");
@@ -170,7 +172,9 @@ void Passwords::addPassword() {
 }
 
 void Passwords::updatePassword() {
+	std::cout << "\n";
 	int64_t passwordIndex = _askForPasswordIndex();
+	std::cout << "\n";
 	// Update name
 	if (_doYouWantToUpdateField("name")) {
 		std::string newName = _askForStringField("new name");

@@ -9,9 +9,9 @@ This includes all the characters you can type on the keyboard besides the tab ke
 
 class AsciiKeyboardChar {
 	private:
-		static int8_t _hexToI4(char hex);
-		static int8_t _hexesToI8(char hex1, char hex2);
-		static char _i8ToAsciiKeyboardChar(int8_t randomBits);
+		static uint8_t _hexToU4(char hex);
+		static uint8_t _hexesToU8(char hex1, char hex2);
+		static char _u8ToAsciiKeyboardChar(uint8_t randomBits);
 	public:
 		static char hexesToAsciiKeyboardChar(char hex1, char hex2);
 };
