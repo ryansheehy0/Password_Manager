@@ -16,22 +16,22 @@ Password::Password(bool encryptedInput, int64_t id, std::string name, std::strin
 		_encryptedName = name;
 		_encryptedUsername = username;
 		_encryptedPassword = password;
-		_name = _decrypt("name", name);
-		_username = _decrypt("username", username);
-		_password = _decrypt("password", password);
+		_name = _encryptOrDecrypt(false, "name", name);
+		_username = _encryptOrDecrypt(false, "username", username);
+		_password = _encryptOrDecrypt(false, "password", password);
 	} else {
 		_name = name;
 		_username = username;
 		_password = password;
-		_encryptedName = _encrypt("name", name);
-		_encryptedUsername = _encrypt("username", username);
-		_encryptedPassword = _encrypt("password", password);
+		_encryptedName = _encryptOrDecrypt(true, "name", name);
+		_encryptedUsername = _encryptOrDecrypt(true, "username", username);
+		_encryptedPassword = _encryptOrDecrypt(true, "password", password);
 	}
 }
 
 // Private----------------------------------------------------------------------
 
-std::string Password::_encrypt(std::string fieldName, std::string fieldValue) {
+std::string Password::_encryptOrDecrypt(bool encrypt, std::string fieldName, std::string fieldValue) {
 	// Create hash
 	std::string hashInput = std::to_string(_id) + fieldName + _masterPassword;
 	std::string hash = _hash(hashInput);
@@ -39,72 +39,33 @@ std::string Password::_encrypt(std::string fieldName, std::string fieldValue) {
 	while (fieldValue.size() != 64) { // Assumed to never be larger than 64 length
 		fieldValue += " "; // Pad with spaces
 	}
-	// Return simple encryption
-	std::string se = _simpleEncryption(hash, fieldValue);
-	std::cout << "SE: " << se << "\n";
-	return se;
+	// Return encryption or decryption
+	return _simpleEncryptionOrDecryption(encrypt, hash, fieldValue);
 }
 
-std::string Password::_decrypt(std::string fieldName, std::string encryptedFieldValue) {
-	// Create hash
-	std::string hashInput = std::to_string(_id) + fieldName + _masterPassword;
-	std::string hash = _hash(hashInput);
-	// Return simple decryption
-	return _simpleDecryption(hash, encryptedFieldValue);
-}
-
-std::string Password::_simpleEncryption(std::string value1, std::string value2) {
-	std::cout << "Value1: " << value1 << "\n";
-	std::cout << "Value2: " << value2 << "\n";
-	// The length of value1 is assumed to be the same as value2
-	std::string encryptedString = "";
+std::string Password::_simpleEncryptionOrDecryption(bool encrypt, std::string value1, std::string value2) {
+	const uint8_t KEYBOARD_CHAR_SIZE = 127 - 32;
+	std::string output = "";
 	// Loop through each character
 	for (int64_t i = 0; i < value1.size(); i++) {
 		uint8_t asciiChar1 = value1[i];
 		uint8_t asciiChar2 = value2[i];
-		// Convert to keyboard chars. The keyboard chars are ascii chars from 32-176.
-		const uint8_t MAX_KEYBOARD_CHAR_VALUE = 126 - 32;
 		uint8_t keyboardChar1 = asciiChar1 - 32;
 		uint8_t keyboardChar2 = asciiChar2 - 32;
-		uint8_t encryptedKeyboardChar = keyboardChar1 + keyboardChar2;
-		// Loop encrypted keyboard char if it overflows
-		if (encryptedKeyboardChar > MAX_KEYBOARD_CHAR_VALUE) {
-			encryptedKeyboardChar %= (MAX_KEYBOARD_CHAR_VALUE + 1);
+		uint8_t outputKeyboardChar;
+		if (encrypt) {
+			outputKeyboardChar = keyboardChar1 + keyboardChar2;
+		} else { // Decrypt
+			outputKeyboardChar = keyboardChar1 - keyboardChar2;
+			outputKeyboardChar += KEYBOARD_CHAR_SIZE;
 		}
-		// Convert keyboard back into ascii
-		uint8_t asciiEncryptedChar = encryptedKeyboardChar + 32;
-		// Add ascii encrypted char to encrypted string
-		encryptedString += asciiEncryptedChar;
+		// Loop output keyboard char if it overflows
+		outputKeyboardChar %= KEYBOARD_CHAR_SIZE;
+		// Add to output
+		uint8_t outputAsciiChar = outputKeyboardChar + 32;
+		output += outputAsciiChar;
 	}
-	// Return encrypted string
-	return encryptedString;
-}
-
-std::string Password::_simpleDecryption(std::string encryptedValue1, std::string encryptedValue2) {
-	// The length of value1 is assumed to be the same as value2
-	std::string decryptedString = "";
-	// Loop through each character
-	for (int64_t i = 0; i < encryptedValue1.size(); i++) {
-		uint8_t encryptedAsciiChar1 = encryptedValue1[i];
-		uint8_t encryptedAsciiChar2 = encryptedValue2[i];
-		// Convert ascii chars to keyboard chars
-		const uint8_t MAX_KEYBOARD_CHAR_VALUE = 126 - 32;
-		uint8_t encryptedKeyboardChar1 = encryptedAsciiChar1 - 32;
-		uint8_t encryptedKeyboardChar2 = encryptedAsciiChar2 - 32;
-		// Decrypt to get keyboard chars
-		uint8_t keyboardChar = encryptedKeyboardChar1 - encryptedKeyboardChar2;
-		keyboardChar += MAX_KEYBOARD_CHAR_VALUE;
-		// Loop decrypted keyboard char if it overflows
-		if (keyboardChar > MAX_KEYBOARD_CHAR_VALUE) {
-			keyboardChar %= (MAX_KEYBOARD_CHAR_VALUE + 1);
-		}
-		// Convert keyboard chars back into ascii
-		uint8_t asciiChar = keyboardChar + 32;
-		// Add ascii char to decrypted string
-		decryptedString += asciiChar;
-	}
-	// Return decrypted string
-	return decryptedString;
+	return output;
 }
 
 std::string Password::_sha512(const std::string& input) { // Returns in hex
@@ -148,15 +109,15 @@ void Password::print() const {
 
 void Password::updateName(std::string newName) {
 	_name = newName;
-	_encryptedName = _encrypt("name", newName);
+	_encryptedName = _encryptOrDecrypt(true, "name", newName);
 }
 
 void Password::updateUsername(std::string newUsername) {
 	_username = newUsername;
-	_encryptedUsername = _encrypt("username", newUsername);
+	_encryptedUsername = _encryptOrDecrypt(true, "username", newUsername);
 }
 
 void Password::updatePassword(std::string newPassword) {
 	_password = newPassword;
-	_encryptedPassword = _encrypt("password", newPassword);
+	_encryptedPassword = _encryptOrDecrypt(true, "password", newPassword);
 }

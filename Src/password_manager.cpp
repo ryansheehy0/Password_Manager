@@ -23,7 +23,6 @@
 					+ simple encryption(Problem) Overflows char. Needs to be uint8_ts
 			+ Writing to file
 		- Get Password(Problem)
-
 */
 
 std::string hiddenInput();

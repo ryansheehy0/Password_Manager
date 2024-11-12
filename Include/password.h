@@ -14,12 +14,8 @@ class Password {
 		std::string _encryptedPassword;
 		std::string _masterPassword;
 
-		std::string _encrypt(std::string fieldName, std::string fieldValue);
-		std::string _decrypt(std::string fieldName, std::string encryptedFieldValue);
-
-		std::string _simpleEncryption(std::string value1, std::string value2);
-		std::string _simpleDecryption(std::string encryptedValue1, std::string encryptedValue2);
-
+		std::string _encryptOrDecrypt(bool encrypt, std::string fieldName, std::string fieldValue);
+		std::string _simpleEncryptionOrDecryption(bool encrypt, std::string value1, std::string value2);
 		std::string _sha512(const std::string& input);
 		std::string _hash(std::string input);
 
