@@ -2,28 +2,8 @@
 #include "../Include/generate_password.h"
 #include <iostream>
 #include <string>
-#include <vector>
 #include <termios.h>
 #include <unistd.h>
-
-/*To Do:
-	- Test and user interface
-		- Get Password
-		- Delete Password
-		+ Add Password
-		- Update Password
-		+ Generate Password
-	- Test each of the classes
-		+ Add password(Problem)
-			+ Creating new id
-			+ Getting each field
-			+ Creating password
-				+ _encrypt(Problem)
-					+ hash(Needs to be manually checked)
-					+ simple encryption(Problem) Overflows char. Needs to be uint8_ts
-			+ Writing to file
-		- Get Password(Problem)
-*/
 
 std::string hiddenInput();
 

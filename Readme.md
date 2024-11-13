@@ -1,8 +1,6 @@
 # Password Manager
 A CLI password manger that uses a very secure and simple encryption algorithm.
 
-
-
 ## How it works
 Imagine you had a combination lock, but instead of the dials being from 0-9, they are all the characters you can type on the keyboard (except for the tab key). Now, imagine that the lock doesn't have 4, but 64 different dials.
 
@@ -39,8 +37,8 @@ hash(id + fieldName + masterPassword) -> ---------------hash---------------
 Decrypt
 
 ```
-hash(id + fieldName + masterPassword) -> ---------------hash---------------
                                          ---------encrypted value----------
+hash(id + fieldName + masterPassword) -> ---------------hash---------------
                          simpleDecryption__________________________________
                                          -----------field value------------
 ```

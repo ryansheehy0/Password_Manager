@@ -7,9 +7,9 @@
 
 class Passwords {
 	private:
-		std::vector<Password*> _passwords;
 		std::string _fileName;
 		std::string _masterPassword;
+		std::vector<Password*> _passwords;
 
 		int64_t _askForPasswordIndex() const;
 		std::string _askForStringField(std::string fieldName) const;

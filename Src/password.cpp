@@ -56,7 +56,7 @@ std::string Password::_simpleEncryptionOrDecryption(bool encrypt, std::string va
 		if (encrypt) {
 			outputKeyboardChar = keyboardChar1 + keyboardChar2;
 		} else { // Decrypt
-			outputKeyboardChar = keyboardChar1 - keyboardChar2;
+			outputKeyboardChar = keyboardChar2 - keyboardChar1;
 			outputKeyboardChar += KEYBOARD_CHAR_SIZE;
 		}
 		// Loop output keyboard char if it overflows
