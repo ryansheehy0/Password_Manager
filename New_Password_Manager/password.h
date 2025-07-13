@@ -42,6 +42,8 @@ class Password {
 		void updateUsername(string newUsername);
 		void updatePassword(string newPassword);
 
+		void print() const;
+
 	private:
 		string _encrypt(string fieldName, string value) const;
 		string _decrypt(string fieldName, string value) const { return _encrypt(fieldName, value); };

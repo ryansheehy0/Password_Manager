@@ -1,8 +1,12 @@
 #include "password.h"
 #include <openssl/sha.h>
 #include <string>
+#include <iostream>
+#include <iomanip>
 
 using std::to_string;
+using std::cout;
+using std::setw;
 
 // Constructor -----------------------------------------------------------------
 Password::Password(string masterPassword, int id, ArgType argType,
@@ -48,6 +52,11 @@ void Password::updatePassword(string newPassword) {
 	_encryptedPassword = _encrypt("password", newPassword);
 }
 
+void Password::print() const {
+	cout << setw(10) << "Name: " << right << _passwords[index].name() << "\n";
+	cout << setw(10) << "Username: " << right << _passwords[index].username() << "\n";
+	cout << setw(10) << "Password: " << right << _passwords[index].password() << "\n";
+}
 
 // Private ---------------------------------------------------------------------
 string Password::_encrypt(string fieldName, string value) const {

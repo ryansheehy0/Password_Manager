@@ -3,7 +3,7 @@
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>
-//#include "passwords.h"
+#include "passwords.h"
 #include "generate_password.h"
 
 using std::string;
@@ -23,13 +23,11 @@ enum class Operation {
 	EXIT
 };
 
-fstream getFile(string fileName);
 string getMasterPassword();
 
 int main() {
-	fstream file = getFile(FILE_NAME);
 	string masterPassword = getMasterPassword();
-	//Passwords passwords = Passwords(file, masterPassword);
+	Passwords passwords = Passwords(FILE_NAME, masterPassword);
 
 	while (true) {
 		cout << "\n";
@@ -70,15 +68,6 @@ int main() {
 				return 1;
 		}
 	}
-}
-
-fstream getFile(string fileName) {
-	fstream file(fileName);
-	if (!file) {
-		cout << "Error opening " << fileName << "\n";
-		exit(1);
-	}
-	return file;
 }
 
 string getMasterPassword() {

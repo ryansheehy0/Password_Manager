@@ -44,19 +44,19 @@ void GeneratePassword::generatePassword() {
 	for (int i = 0; i < passwordLength; i++) {
 		// Guarantee at least one included character
 		if (i == uppercaseIndex) {
-			password += UPPERCASE_CHARACTERS[_randomIndex(UPPERCASE_CHARACTERS.length())];
+			password += UPPERCASE_CHARACTERS[_randomIndex(UPPERCASE_CHARACTERS.size())];
 			continue;
 		}
 		if (i == specialIndex) {
-			password += SPECIAL_CHARACTERS[_randomIndex(SPECIAL_CHARACTERS.length())];
+			password += SPECIAL_CHARACTERS[_randomIndex(SPECIAL_CHARACTERS.size())];
 			continue;
 		}
 		if (i == numbersIndex) {
-			password += NUMBER_CHARACTERS[_randomIndex(NUMBER_CHARACTERS.length())];
+			password += NUMBER_CHARACTERS[_randomIndex(NUMBER_CHARACTERS.size())];
 			continue;
 		}
 
-		password += passwordCharacters[_randomIndex(passwordCharacters.length())];
+		password += passwordCharacters[_randomIndex(passwordCharacters.size())];
 	}
 
 	// Print out password

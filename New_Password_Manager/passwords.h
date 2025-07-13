@@ -11,12 +11,12 @@ using std::fstream;
 
 class Passwords {
 	private:
-		fstream _file;
+		string _fileName;
 		string _masterPassword;
 		vector<Password> _passwords;
 
 	public:
-		Passwords(fstream file, string masterPassword);
+		Passwords(string fileName, string masterPassword);
 
 		void printPassword() const;
 		void deletePassword();

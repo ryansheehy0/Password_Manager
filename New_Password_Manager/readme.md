@@ -8,7 +8,7 @@ A simple command line interface(CLI) password manger.
 - Choose your master password
 
 ## How it works
-Imagine you had a combination lock, but instead of the dials being from 0-9, they are all the characters you can type on the keyboard (except for tab). Now, imagine that the lock doesn't have 4, but 64 different dials.
+Imagine you had a combination lock, but instead of the dials being from 0-9, they are all the characters you can type on the keyboard. Now, imagine that the lock doesn't have 4, but 64 different dials.
 
 <img width=250 src="./combination_lock.jpeg">
 
