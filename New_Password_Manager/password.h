@@ -28,11 +28,6 @@ class Password {
 			string password
 		);
 
-		void print() const;
-		void updateName(string newName);
-		void updateUsername(string newUsername);
-		void updatePassword(string newPassword);
-
 		// Getters
 		int id() const {return _id;}
 		string name() const {return _name;}
@@ -42,8 +37,14 @@ class Password {
 		string encryptedUsername() const {return _encryptedUsername;}
 		string encryptedPassword() const {return _encryptedPassword;}
 
+		// Setters
+		void updateName(string newName);
+		void updateUsername(string newUsername);
+		void updatePassword(string newPassword);
+
 	private:
-		string encrypt(string value) const;
-		string decrypt(string value) const;
-		string hash(string value) const;
+		string _encrypt(string fieldName, string value) const;
+		string _decrypt(string fieldName, string value) const { return _encrypt(fieldName, value); };
+		string _hash(string value) const;
+		string _sha512(string value) const;
 };

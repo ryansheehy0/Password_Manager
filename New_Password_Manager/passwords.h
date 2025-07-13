@@ -11,13 +11,21 @@ using std::fstream;
 
 class Passwords {
 	private:
-		vector<Password> passwords;
-		fstream file;
-		string masterPassword;
+		fstream _file;
+		string _masterPassword;
+		vector<Password> _passwords;
 
 	public:
 		Passwords(fstream file, string masterPassword);
 
-		void addPassword(string name, string username, string password);
-		void updatePassword()
+		void printPassword() const;
+		void deletePassword();
+		void addPassword();
+		void updatePassword();
+
+	private:
+		int _askForPasswordIndex() const ;
+		string _askForStringField(string fieldName) const;
+		bool _doYouWantToUpdateField(string fieldName) const;
+		void _writeToFile() const;
 };
