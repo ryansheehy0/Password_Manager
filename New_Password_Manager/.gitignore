@@ -1,0 +1,3 @@
+*.o
+.passwords
+password_manager
