@@ -2,15 +2,19 @@
 #include "password.h"
 #include <string>
 #include <iostream>
+#include <fstream>
 
 using std::stoi;
 using std::cout;
 using std::cin;
 using std::ofstream;
+using std::ifstream;
+using std::getline;
+using std::ios;
 
 // Constructor -----------------------------------------------------------------
 Passwords::Passwords(string fileName, string masterPassword) {
-	fstream file(fileName);
+	ifstream file(fileName, ios::binary);
 	if (!file) {
 		cout << "Error opening " << fileName << "\n";
 		exit(1);
@@ -18,21 +22,15 @@ Passwords::Passwords(string fileName, string masterPassword) {
 	_fileName = fileName;
 	_masterPassword = masterPassword;
 	// Go through each line of the file and create passwords
-	string line;
-	while (getline(file, line)) {
+	while (true) {
 		int id;
-		try {
-			id = stoi(line);
-		} catch(...) {
-			cout << "Error with password id in file.\n";
-			exit(1);
-		}
-		getline(file, line);
-		string encryptedName = line;
-		getline(file, line);
-		string encryptedUsername = line;
-		getline(file, line);
-		string encryptedPassword = line;
+		if (!file.read(reinterpret_cast<char *>(&id), sizeof(id))) break;
+		string encryptedName(64, '\0');
+		string encryptedUsername(64, '\0');
+		string encryptedPassword(64, '\0');
+		file.read(encryptedName.data(), 64);
+		file.read(encryptedUsername.data(), 64);
+		file.read(encryptedPassword.data(), 64);
 		// Create password and add to vector
 		Password password = Password(_masterPassword, id, ArgType::ENCRYPTED,
 			encryptedName,
@@ -41,6 +39,7 @@ Passwords::Passwords(string fileName, string masterPassword) {
 		);
 		_passwords.push_back(password);
 	}
+
 	file.close();
 }
 
@@ -54,14 +53,18 @@ void Passwords::printPassword() const {
 void Passwords::deletePassword() {
 	int index = _askForPasswordIndex();
 	if (index == -1) return;
-	cout << "Deleted:\n";
+	cout << "Deleted\n";
 	_passwords[index].print();
 	_passwords.erase(_passwords.begin() + index);
 	_writeToFile();
 }
 
 void Passwords::addPassword() {
-	int id = _passwords[_passwords.size() - 1].id() + 1;
+	int id = 0;
+	if (!_passwords.empty()) {
+		id = _passwords[_passwords.size() - 1].id() + 1;
+	}
+	cout << "\n";
 	string name = _askForStringField("name");
 	string username = _askForStringField("username");
 	string password = _askForStringField("password");
@@ -94,14 +97,16 @@ void Passwords::updatePassword() {
 
 // Private ---------------------------------------------------------------------
 int Passwords::_askForPasswordIndex() const {
+	cout << "\n";
 	for (int i = 0; i < _passwords.size(); i++) {
 		Password password = _passwords[i];
-		std::cout << i << ") " << password.name() << "\n";
+		cout << i << ") " << password.name() << "\n";
 	}
-	std::cout << "Which password do you want to select? ";
+	cout << "Which password do you want to select? ";
 	int input;
 	string line;
 	getline(cin, line);
+	cout << "\n";
 	try {
 		input = stoi(line);
 	} catch (...) {
@@ -117,7 +122,7 @@ string Passwords::_askForStringField(string fieldName) const {
 		string line;
 		getline(cin, line);
 		if (line.size() > 64) {
-			cout << "  Must be less than or equal to 64 characters.\n";
+			cout << "Must be less than or equal to 64 characters.\n";
 			continue;
 		}
 		line.resize(64, ' ');
@@ -126,7 +131,7 @@ string Passwords::_askForStringField(string fieldName) const {
 }
 
 bool Passwords::_doYouWantToUpdateField(string fieldName) const {
-	cout << "Do you ant to update " << fieldName << "? (y/n): ";
+	cout << "Do you want to update " << fieldName << "? (y/n): ";
 	string line;
 	getline(cin, line);
 	switch (line[0]) {
@@ -139,16 +144,17 @@ bool Passwords::_doYouWantToUpdateField(string fieldName) const {
 }
 
 void Passwords::_writeToFile() const {
-	ofstream file(_fileName);
+	ofstream file(_fileName, ios::binary);
 	if (!file) {
 		cout << "Error opening " << _fileName << "\n";
 		exit(1);
 	}
 	for (const Password& password : _passwords) {
-		file << password.id() << "\n"
-		     << password.encryptedName() << "\n"
-		     << password.encryptedUsername() << "\n"
-		     << password.encryptedPassword() << "\n";
+		int id = password.id();
+		file.write(reinterpret_cast<const char*>(&id), sizeof(id));
+		file.write(password.encryptedName().data(), 64);
+		file.write(password.encryptedUsername().data(), 64);
+		file.write(password.encryptedPassword().data(), 64);
 	}
 	file.close();
 }

@@ -1,5 +1,4 @@
 #include <string>
-#include <fstream>
 #include <iostream>
 #include <termios.h>
 #include <unistd.h>
@@ -7,7 +6,6 @@
 #include "generate_password.h"
 
 using std::string;
-using std::fstream;
 using std::cout;
 using std::cin;
 using std::stoi;
@@ -40,7 +38,6 @@ int main() {
 		Operation operation;
 		string line;
 		getline(cin, line);
-		cout << "\n";
 		try {
 			operation = static_cast<Operation>(stoi(line));
 		} catch(...) {
@@ -49,16 +46,16 @@ int main() {
 
 		switch (operation) {
 			case Operation::GET_PASSWORD:
-				//passwords.printPassword();
+				passwords.printPassword();
 				break;
 			case Operation::DELETE_PASSWORD:
-				//passwords.deletePassword();
+				passwords.deletePassword();
 				break;
 			case Operation::ADD_PASSWORD:
-				//passwords.addPassword();
+				passwords.addPassword();
 				break;
 			case Operation::UPDATE_PASSWORD:
-				//passwords.updatePassword();
+				passwords.updatePassword();
 				break;
 			case Operation::GENERATE_PASSWORD:
 				GeneratePassword::generatePassword();

@@ -3,11 +3,9 @@
 #include "password.h"
 #include <vector>
 #include <string>
-#include <fstream>
 
 using std::vector;
 using std::string;
-using std::fstream;
 
 class Passwords {
 	private:
@@ -24,7 +22,7 @@ class Passwords {
 		void updatePassword();
 
 	private:
-		int _askForPasswordIndex() const ;
+		int _askForPasswordIndex() const;
 		string _askForStringField(string fieldName) const;
 		bool _doYouWantToUpdateField(string fieldName) const;
 		void _writeToFile() const;

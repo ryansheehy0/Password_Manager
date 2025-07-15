@@ -6,6 +6,7 @@ using std::cout;
 using std::cin;
 
 void GeneratePassword::generatePassword() {
+	cout << "\n";
 	string password;
 
 	string passwordCharacters = "abcdefghijklmnopqrstuvwxyz";
