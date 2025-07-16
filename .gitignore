@@ -1,1 +1,4 @@
-my_passwords.txt
+*.o
+.passwords
+password_manager
+Old
