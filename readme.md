@@ -1,6 +1,8 @@
 # Password Manager
 A simple command line interface(CLI) password manger.
 
+<img width=500 src="./screenshot.png">
+
 ## How to run
 - Compile with `make`
 - Create a `.passwords` file in the same folder as `password_manager`
